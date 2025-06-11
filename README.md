@@ -9,6 +9,8 @@ Este é um aplicativo de receitas desenvolvido como parte do projeto da discipli
 > As telas de **login, cadastro e perfil** estão funcionando apenas **de forma visual**. Elas não se conectam ao backend e **não realizam autenticação real**.
 > 
 > As ações como "Criar Conta", "Entrar" e alterar nome/e-mail são simuladas e não persistem dados.
+>
+> Recomendo rodar pelo expo go do celular pois via web ele não estava renderizando.
 
 ---
 
