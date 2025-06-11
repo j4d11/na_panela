@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 export default function RecipeCard({ title, description, rating, author, onPress, image }) {
   return (
@@ -20,7 +20,8 @@ export default function RecipeCard({ title, description, rating, author, onPress
         <Text style={styles.author}>{author}</Text>
       </View>
       <TouchableOpacity onPress={onPress} activeOpacity={0.6} style={styles.button}>
-        <AntDesign name="right" size={20} color="#e17897" />
+        <Ionicons name="play" size={24} color="#D94F6D" />
+
       </TouchableOpacity>
     </View>
   );
@@ -28,7 +29,7 @@ export default function RecipeCard({ title, description, rating, author, onPress
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#F6DEEA',
     borderRadius: 15,
     padding: 12,
     flexDirection: 'row',

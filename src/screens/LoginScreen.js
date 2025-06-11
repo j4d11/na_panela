@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -10,11 +9,7 @@ import {
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { firebase } from '../../firebaseConfig';
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-
-WebBrowser.maybeCompleteAuthSession();
+import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -22,85 +17,39 @@ export default function LoginScreen() {
     const [lembrar, setLembrar] = useState(false);
     const navigation = useNavigation();
 
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        clientId: '484689572987-6q938fj981d3rl3g1sflqi9oot57h60a.apps.googleusercontent.com',
-    });
-
-    useEffect(() => {
-        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-            }
-        });
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        if (response?.type === 'success') {
-            const { id_token } = response.params;
-            const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
-            firebase.auth().signInWithCredential(credential)
-                .then(async (result) => {
-                    const user = result.user;
-                    const ref = firebase.firestore().collection('usuarios').doc(user.uid);
-                    const snap = await ref.get();
-                    if (!snap.exists) {
-                        await ref.set({
-                            nome: user.displayName,
-                            email: user.email,
-                            foto: user.photoURL,
-                            criadoEm: new Date(),
-                        });
-                    }
-                })
-                .catch(error => alert('Erro login Google: ' + error.message));
-        }
-    }, [response]);
-
-    const handleLogin = async () => {
-        try {
-            const cred = await firebase.auth().signInWithEmailAndPassword(email, senha);
-            const ref = firebase.firestore().collection('usuarios').doc(cred.user.uid);
-            const snap = await ref.get();
-            if (!snap.exists) {
-                await ref.set({
-                    email: cred.user.email,
-                    criadoEm: new Date(),
-                });
-            }
-        } catch (error) {
-            alert('Erro: ' + error.message);
-        }
-    };
-
     return (
         <View style={styles.container}>
-            {/* Logo/texto superior */}
-            <Text style={styles.logo}>Na{'\n'}Panela</Text>
+            <Image
+                source={require('../../assets/imgs/Captura de tela 2025-06-10 224332.png')}
+                style={styles.logo}
+                resizeMode="contain"
+            />
 
             <View style={styles.card}>
                 <Text style={styles.title}>Bem-Vindo de Volta!</Text>
-                <Text style={styles.subtitle}>Entre na sua conta para acessar suas receitas favoritas</Text>
+                <Text style={styles.subtitle}>
+                    Entre na sua conta para acessar suas receitas favoritas
+                </Text>
 
                 <View style={styles.inputContainer}>
-                    <MaterialIcons name="email" size={20} color="#e17897" style={styles.icon} />
+                    <MaterialIcons name="email" size={20} color="#E4899D" style={styles.icon} />
                     <TextInput
                         placeholder="Insira seu Email"
                         value={email}
                         onChangeText={setEmail}
                         style={styles.input}
-                        placeholderTextColor="#e17897"
+                        placeholderTextColor="#E4899D"
                     />
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <MaterialIcons name="lock" size={20} color="#e17897" style={styles.icon} />
+                    <MaterialIcons name="lock" size={20} color="#E4899D" style={styles.icon} />
                     <TextInput
                         placeholder="Insira sua senha"
                         value={senha}
                         onChangeText={setSenha}
                         style={styles.input}
-                        placeholderTextColor="#e17897"
+                        placeholderTextColor="#E4899D"
                         secureTextEntry
                     />
                 </View>
@@ -110,7 +59,7 @@ export default function LoginScreen() {
                         <Checkbox
                             status={lembrar ? 'checked' : 'unchecked'}
                             onPress={() => setLembrar(!lembrar)}
-                            color="#e17897"
+                            color="#E4899D"
                         />
                         <Text style={styles.checkboxLabel}>Lembrar de mim</Text>
                     </View>
@@ -119,30 +68,22 @@ export default function LoginScreen() {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <TouchableOpacity
+                    style={[styles.button, { marginBottom: 10 }]}
+                    onPress={() => navigation.navigate('Home')}
+                >
                     <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
 
-                <View style={styles.separator}>
-                    <View style={styles.line} />
-                    <Text style={styles.ou}>ou</Text>
-                    <View style={styles.line} />
-                </View>
-
-                <TouchableOpacity
-                    style={styles.googleButton}
-                    disabled={!request}
-                    onPress={() => promptAsync()}
-                >
+                <TouchableOpacity style={styles.googleButton} onPress={() => navigation.navigate('Home')}>
                     <AntDesign name="google" size={20} color="#fff" />
                     <Text style={styles.googleButtonText}>Continuar com Google</Text>
                 </TouchableOpacity>
-
                 <Text style={styles.cadastro}>
                     Não tem uma conta?{' '}
                     <Text
                         style={styles.link}
-                        onPress={() => navigation.navigate('Cadastro')} // nome da sua tela de registro
+                        onPress={() => navigation.navigate('Cadastro')}
                     >
                         Cadastre-se aqui
                     </Text>
@@ -155,18 +96,14 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffe6ec',
+        backgroundColor: '#FFEDED',
         alignItems: 'center',
         justifyContent: 'center',
     },
     logo: {
-        fontSize: 34,
-        color: '#e17897',
-        fontWeight: 'bold',
-        textAlign: 'center',
+        width: 200,
+        height: 80,
         marginBottom: 20,
-        fontFamily: 'cursive',
-        lineHeight: 38,
     },
     card: {
         backgroundColor: '#fff',
@@ -181,20 +118,20 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 22,
-        color: '#e17897',
+        color: '#E4899D',
         fontWeight: 'bold',
         marginBottom: 5,
     },
     subtitle: {
         fontSize: 14,
-        color: '#a3a3a3',
+        color: '#D94F6D',
         textAlign: 'center',
         marginBottom: 20,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#e17897',
+        borderColor: '#E4899D',
         borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
@@ -224,11 +161,11 @@ const styles = StyleSheet.create({
         color: '#a3a3a3',
     },
     link: {
-        color: '#e17897',
+        color: '#E4899D',
         fontWeight: 'bold',
     },
     button: {
-        backgroundColor: '#e17897',
+        backgroundColor: '#E4899D',
         paddingVertical: 12,
         borderRadius: 10,
         width: '100%',
@@ -238,22 +175,12 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
-    separator: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 15,
-    },
-    line: {
-        flex: 1,
-        height: 1,
-        backgroundColor: '#ccc',
-    },
-    ou: {
-        marginHorizontal: 10,
+    cadastro: {
+        marginTop: 15,
         color: '#a3a3a3',
     },
     googleButton: {
-        backgroundColor: '#e17897',
+        backgroundColor: '#E4899D',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -265,9 +192,5 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginLeft: 10,
         fontWeight: 'bold',
-    },
-    cadastro: {
-        marginTop: 15,
-        color: '#a3a3a3',
     },
 });

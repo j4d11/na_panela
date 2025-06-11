@@ -1,104 +1,107 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Para o ícone de voltar e sair
+import { Ionicons } from '@expo/vector-icons';
+import BackButton from '../components/BackButton';
 
 export default function ProfileScreen({ navigation }) {
+  const [name, setName] = useState('Jade Sawandra');
+  const [email, setEmail] = useState('jade@gmail.com');
+
+  const [editedName, setEditedName] = useState(name);
+  const [editedEmail, setEditedEmail] = useState(email);
+
+  const handleSave = () => {
+    setName(editedName);
+    setEmail(editedEmail);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Botão Voltar */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={20} color="#d55a92" />
-        <Text style={styles.backText}>Voltar</Text>
-      </TouchableOpacity>
+      <BackButton />
 
-      {/* Card do Perfil */}
-      <View style={styles.profileCard}>
-        {/* Imagem genérica (ícone de perfil) */}
-        <View style={styles.avatarPlaceholder} />
-        <Text style={styles.profileName}>Jade Sawandra</Text>
-        <Text style={styles.profileEmail}>jade@gmail.com</Text>
-      </View>
+      <View style={styles.cardWrapper}>
+        <View style={styles.profileCard}>
+          <Image source={require('../../assets/imgs/user.png')} style={styles.profileImage} />
+          <Text style={styles.profileName}>{name}</Text>
+          <Text style={styles.profileEmail}>{email}</Text>
+        </View>
 
-      {/* Favoritos */}
-      <View style={styles.favBox}>
-        <Ionicons name="heart-outline" size={18} color="#d55a92" />
-        <Text style={styles.favText}>Favoritos</Text>
-      </View>
+        {/* Card Editável com Favoritos + Formulário */}
+        <View style={styles.editBox}>
+          <View style={styles.favBox}>
+            <Ionicons name="heart-outline" size={18} color="#d55a92" />
+            <Text style={styles.favText}>Favoritos</Text>
+          </View>
 
-      {/* Editar dados */}
-      <View style={styles.editBox}>
-        <Text style={styles.label}>Edite seus dados:</Text>
+          <Text style={styles.label}>Edite seus dados:</Text>
 
-        <Text style={styles.inputLabel}>Nome</Text>
-        <TextInput style={styles.input} placeholder="Nome..." />
+          <Text style={styles.inputLabel}>Nome</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome..."
+            value={editedName}
+            onChangeText={setEditedName}
+          />
 
-        <Text style={styles.inputLabel}>Email</Text>
-        <TextInput style={styles.input} placeholder="Email..." keyboardType="email-address" />
+          <Text style={styles.inputLabel}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email..."
+            keyboardType="email-address"
+            value={editedEmail}
+            onChangeText={setEditedEmail}
+          />
 
-        <TouchableOpacity style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>✔ Salvar</Text>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>✔ Salvar</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Botão Sair com Ícone Acima */}
+        <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('Login')}>
+          <Ionicons name="log-out-outline" size={28} color="#B81D4E" />
+          <Text style={styles.logoutText}>Sair</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Botão Sair */}
-      <TouchableOpacity style={styles.logoutButton}>
-        <Ionicons name="log-out-outline" size={24} color="#d55a92" />
-        <Text style={styles.logoutText}>Sair</Text>
-      </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffe8f1',
-    padding: 20,
   },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  backText: {
-    marginLeft: 5,
-    color: '#d55a92',
-    fontSize: 16,
+  cardWrapper: {
+    flex: 1,
+    backgroundColor: '#fff',
+    marginTop: 20,
+    marginHorizontal: 10,
+    borderRadius: 16,
+    padding: 15,
+    justifyContent: 'flex-start',
+    marginBottom: 60,
   },
   profileCard: {
-    backgroundColor: '#fdd6e4',
+    backgroundColor: '#F6DEEA',
     alignItems: 'center',
     padding: 20,
     borderRadius: 12,
     marginBottom: 20,
   },
-  avatarPlaceholder: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#f9bcd0',
-    borderRadius: 30,
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     marginBottom: 10,
   },
   profileName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#822b56',
+    color: '#D94F6D',
   },
   profileEmail: {
     fontSize: 14,
-    color: '#a84d74',
-  },
-  favBox: {
-    backgroundColor: '#fdd6e4',
-    padding: 10,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 20,
-  },
-  favText: {
-    fontSize: 16,
     color: '#a84d74',
   },
   editBox: {
@@ -107,23 +110,38 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 30,
   },
+  favBox: {
+    backgroundColor: '#F6DEEA',
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 15,
+  },
+  favText: {
+    fontSize: 18,
+    color: '#a84d74',
+    fontWeight: 'bold',
+  },
   label: {
     fontWeight: 'bold',
-    color: '#822b56',
+    color: '#D94F6D',
+    fontSize: 18,
     marginBottom: 10,
   },
   inputLabel: {
-    color: '#822b56',
+    color: '#D94F6D',
     marginTop: 10,
     marginBottom: 4,
   },
   input: {
-    backgroundColor: '#fdd6e4',
+    backgroundColor: '#F6DEEA',
     padding: 10,
     borderRadius: 8,
   },
   saveButton: {
-    backgroundColor: '#a84d74',
+    backgroundColor: '#B81D4E',
     alignSelf: 'flex-end',
     paddingVertical: 8,
     paddingHorizontal: 15,
@@ -135,14 +153,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logoutButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
     alignItems: 'center',
+    marginTop: 10,
   },
   logoutText: {
     color: '#d55a92',
     fontWeight: 'bold',
     fontSize: 18,
+    marginTop: 4,
   },
 });

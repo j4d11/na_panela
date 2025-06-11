@@ -19,7 +19,7 @@ export default function CategoriasScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffe6ec' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFEDED' }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }} style={styles.container}>
         <Header />
 
@@ -61,7 +61,7 @@ export default function CategoriasScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: '#ffe6ec',
+    backgroundColor: '#FFEDED',
   },
   title: {
     fontSize: 22,

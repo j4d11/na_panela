@@ -1,40 +1,66 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import Header from '../components/Header';
+import useChefProfile from '../hooks/useChefProfile';
 import RecipeCard from '../components/RecipeCard';
-import useChefProfile from '../hooks/useChefProfile';  // import do hook
+import BackButton from '../components/BackButton';
 
-export default function ChefProfile({ navigation }) {
-    const { chef } = useChefProfile();  // usa o hook aqui
+export default function ChefProfile({ navigation, route }) {
+    const { chef: chefFromHook } = useChefProfile();
+    const { chef: chefFromParams } = route.params || {};
+
+    const chef = chefFromParams || chefFromHook;
+
+    // Receitas fixas para o perfil do chef
+    const fixedRecipes = [
+        {
+            id: '1',
+            title: 'Bolo de Chocolate',
+            description: 'Fofinho, molhadinho e delicioso!',
+            rating: '4.8',
+        },
+        {
+            id: '2',
+            title: 'Feijoada Tradicional',
+            description: 'Receita clássica com um toque especial.',
+            rating: '4.9',
+        },
+        {
+            id: '3',
+            title: 'Torta de Limão',
+            description: 'A sobremesa perfeita para dias quentes.',
+            rating: '4.7',
+        },
+    ];
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <AntDesign name="arrowleft" size={24} color="#e17897" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Voltar</Text>
-            </View>
+               <BackButton />
 
             <ScrollView style={styles.scrollContainer}>
-                <View style={styles.profileSection}>
-                    <View style={styles.chefImage} />
-                    <Text style={styles.chefName}>{chef.name}</Text>
-                    <Text style={styles.chefBio}>{chef.bio}</Text>
+                <View style={styles.profileCard}>
+                    <View style={styles.profileSection}>
+                        <Image source={chef.img} style={styles.chefImage} />
+                        <View style={styles.chefInfo}>
+                            <Text style={styles.chefName}>{chef.name}</Text>
+                            <Text style={styles.chefBio}>{chef.bio || 'Apaixonado por culinária desde criança\nMembro desde 2024'}</Text>
+                        </View>
+                    </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.recipeCardContainer}>
                     <Text style={styles.sectionTitle}>Minhas Receitas</Text>
-                    {chef.recipes.map((recipe) => (
-                        <RecipeCard
-                            key={recipe.id}
-                            title={recipe.title}
-                            description={recipe.description}
-                            rating={recipe.rating}
-                            author={chef.name}
-                        />
-                    ))}
+                    <View style={styles.cardWrapper}>
+                        {fixedRecipes.map((recipe) => (
+                            <RecipeCard
+                                key={recipe.id}
+                                title={recipe.title}
+                                description={recipe.description}
+                                rating={recipe.rating}
+                                author={chef.name}
+                            />
+                        ))}
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -42,56 +68,70 @@ export default function ChefProfile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  // seu estilo continua igual
-  container: {
-      flex: 1,
-      backgroundColor: '#ffe6ec',
-  },
-  header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 15,
-      backgroundColor: '#fff',
-      borderBottomWidth: 1,
-      borderBottomColor: '#f0f0f0',
-  },
-  headerTitle: {
-      marginLeft: 10,
-      color: '#e17897',
-      fontSize: 16,
-  },
-  scrollContainer: {
-      paddingHorizontal: 15,
-  },
-  profileSection: {
-      alignItems: 'center',
-      paddingVertical: 25,
-  },
-  chefImage: {
-      width: 100,
-      height: 100,
-      backgroundColor: '#f9cfd8',
-      borderRadius: 50,
-      marginBottom: 15,
-  },
-  chefName: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#e17897',
-      marginBottom: 5,
-  },
-  chefBio: {
-      color: '#a3a3a3',
-      fontSize: 14,
-  },
-  section: {
-      marginTop: 20,
-      marginBottom: 30,
-  },
-  sectionTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#e17897',
-      marginBottom: 15,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#FFEDED',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 15,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    headerTitle: {
+        marginLeft: 10,
+        color: '#e17897',
+        fontSize: 16,
+    },
+    scrollContainer: {
+        paddingHorizontal: 15,
+    },
+    profileCard: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginTop: 20,
+    },
+    profileSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    chefImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: '#f9cfd8',
+        marginRight: 15,
+    },
+    chefInfo: {
+        flex: 1,
+    },
+    chefName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#e17897',
+        marginBottom: 5,
+    },
+    chefBio: {
+        color: '#a3a3a3',
+        fontSize: 14,
+    },
+    recipeCardContainer: {
+        marginTop: 20,
+        marginBottom: 30,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+    },
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#e17897',
+        marginBottom: 15,
+    },
+    cardWrapper: {
+        gap: 10,
+    },
 });

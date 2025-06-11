@@ -7,19 +7,20 @@ export default function CustomDrawer(props) {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
       <View style={styles.profile}>
-        <Icon name="account-circle" size={80} color="#d46b86" />
+        <Image source={require('../../assets/imgs/user.png')} style={styles.profileImage} />
+        <View style={styles.divider} />
       </View>
 
       <View style={styles.menu}>
         <DrawerItem
           label="Início"
-          icon={({ color, size }) => <Icon name="home" color="#d46b86" size={size} />}
+          icon={({ size }) => <Icon name="home" color="#d46b86" size={28} />}
           labelStyle={styles.label}
           onPress={() => props.navigation.navigate('Home')}
         />
         <DrawerItem
           label="Sair"
-          icon={({ color, size }) => <Icon name="logout" color="#d46b86" size={size} />}
+          icon={({ size }) => <Icon name="logout" color="#d46b86" size={28} />}
           labelStyle={styles.label}
           onPress={() => props.navigation.navigate('Login')}
         />
@@ -31,21 +32,34 @@ export default function CustomDrawer(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffe6ec', // rosa claro
+    backgroundColor: '#FFEDED', 
   },
   profile: {
     alignItems: 'center',
     marginVertical: 30,
   },
+  profileImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    marginBottom: 10,
+  },
+  divider: {
+    width: 60,
+    height: 2,
+    backgroundColor: '#d46b86',
+    marginTop: 10,
+    borderRadius: 1,
+  },
   menu: {
-    backgroundColor: '#fff0f5',
+    backgroundColor: '#ffffff', 
     marginHorizontal: 20,
-    borderRadius: 10,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingVertical: 16,
   },
   label: {
     color: '#d46b86',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18, 
   },
 });

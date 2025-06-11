@@ -9,21 +9,24 @@ export default function RegistroScreen({ navigation }) {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
-  const handleRegistro = () => {
-    // lógica de registro aqui
-  };
-
   return (
     <View style={styles.container}>
-      {/* <Image source={require('../assets/logo.png')} style={styles.logo} /> */}
-      <View style={styles.cardBranco}>
-      <Text style={styles.titulo}>Crie sua conta</Text>
-      <Text style={styles.subtitulo}>Junte-se à nossa comunidade e descubra novas receitas!</Text>
+      <Image
+        source={require('../../assets/imgs/Captura de tela 2025-06-10 224332.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+      <View style={styles.card}>
+        <Text style={styles.title}>Crie sua conta</Text>
+        <Text style={styles.subtitle}>
+          Junte-se à nossa comunidade e descubra novas receitas!
+        </Text>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="person-outline" size={20} color="#f472b6" style={styles.icon} />
+          <MaterialIcons name="person-outline" size={20} color="#E4899D" style={styles.icon} />
           <TextInput
             placeholder="Insira seu Nome"
+            placeholderTextColor="#E4899D"
             value={nome}
             onChangeText={setNome}
             style={styles.input}
@@ -31,9 +34,10 @@ export default function RegistroScreen({ navigation }) {
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="email" size={20} color="#f472b6" style={styles.icon} />
+          <MaterialIcons name="email" size={20} color="#E4899D" style={styles.icon} />
           <TextInput
             placeholder="Insira seu Email"
+            placeholderTextColor="#E4899D"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
@@ -41,9 +45,10 @@ export default function RegistroScreen({ navigation }) {
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="lock-outline" size={20} color="#f472b6" style={styles.icon} />
+          <MaterialIcons name="lock-outline" size={20} color="#e17897" style={styles.icon} />
           <TextInput
             placeholder="Crie uma senha"
+            placeholderTextColor="#e17897"
             secureTextEntry
             value={senha}
             onChangeText={setSenha}
@@ -52,9 +57,10 @@ export default function RegistroScreen({ navigation }) {
         </View>
 
         <View style={styles.inputContainer}>
-          <MaterialIcons name="lock-outline" size={20} color="#f472b6" style={styles.icon} />
+          <MaterialIcons name="lock-outline" size={20} color="#e17897" style={styles.icon} />
           <TextInput
             placeholder="Confirme sua senha"
+            placeholderTextColor="#e17897"
             secureTextEntry
             value={confirmarSenha}
             onChangeText={setConfirmarSenha}
@@ -62,18 +68,22 @@ export default function RegistroScreen({ navigation }) {
           />
         </View>
 
-        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.botaoTexto}>Criar Conta</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>Criar Conta</Text>
         </TouchableOpacity>
 
-        <Text style={styles.ou}>ou</Text>
+        <View style={styles.separator}>
+          <View style={styles.line} />
+          <Text style={styles.ou}>ou</Text>
+          <View style={styles.line} />
+        </View>
 
-        <TouchableOpacity style={styles.googleBotao}>
+        <TouchableOpacity style={styles.googleButton} onPress={() => navigation.navigate('Home')}>
           <AntDesign name="google" size={20} color="#fff" />
-          <Text style={styles.botaoGoogleTexto}>Continuar com Google</Text>
+          <Text style={styles.googleButtonText}>Continuar com Google</Text>
         </TouchableOpacity>
 
-        <Text style={styles.loginTexto}>
+        <Text style={styles.loginText}>
           Já tem uma conta?
           <Text style={styles.link} onPress={() => navigation.navigate('Login')}> Faça login aqui</Text>
         </Text>
@@ -85,34 +95,21 @@ export default function RegistroScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffe4e6',
-    padding: 20,
+    backgroundColor: '#FFEDED',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 10,
+    width: 150,
+    height: 80,
     resizeMode: 'contain',
-  },
-  titulo: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#be123c',
-    marginBottom: 5,
-  },
-  subtitulo: {
-    textAlign: 'center',
-    fontSize: 14,
-    color: '#881337',
     marginBottom: 20,
   },
-  cardBranco: {
+  card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 20,
-    width: '100%',
+    padding: 25,
+    width: '85%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -120,62 +117,81 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
+  title: {
+    fontSize: 22,
+    color: '#E4899D',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#D94F6D',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    borderColor: '#E4899D',
+    borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 15,
     width: '100%',
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#f9a8d4',
+    height: 50,
   },
   icon: {
     marginRight: 8,
   },
   input: {
     flex: 1,
-    height: 45,
+    color: '#000',
   },
-  botao: {
-    backgroundColor: '#db2777',
-    padding: 12,
-    borderRadius: 25,
+  button: {
+    backgroundColor: '#E4899D',
+    paddingVertical: 12,
+    borderRadius: 10,
     width: '100%',
     alignItems: 'center',
-    marginTop: 10,
   },
-  botaoTexto: {
+  buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+  },
+  separator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ccc',
   },
   ou: {
-    color: '#6b7280',
-    marginVertical: 10,
+    marginHorizontal: 10,
+    color: '#a3a3a3',
   },
-  googleBotao: {
-    backgroundColor: '#ea4335',
-    padding: 10,
-    borderRadius: 25,
-    width: '100%',
-    alignItems: 'center',
+  googleButton: {
+    backgroundColor: '#E4899D',
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
+    paddingVertical: 12,
+    borderRadius: 10,
+    width: '100%',
   },
-  botaoGoogleTexto: {
+  googleButtonText: {
     color: '#fff',
+    marginLeft: 10,
     fontWeight: 'bold',
   },
-  loginTexto: {
+  loginText: {
     marginTop: 15,
-    color: '#4b5563',
+    color: '#a3a3a3',
   },
   link: {
-    color: '#be123c',
+    color: '#E4899D',
     fontWeight: 'bold',
   },
 });

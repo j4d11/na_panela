@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
-import { useRecipeDetails } from '../hooks/useRecipeDetails'; // ajuste o caminho conforme necessário
+import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRecipeDetails } from '../hooks/useRecipeDetails';
+import BackButton from '../components/BackButton';
 
 export default function RecipeDetails({ route, navigation }) {
   const { recipe, rating } = route.params;
@@ -34,12 +35,7 @@ export default function RecipeDetails({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="arrowleft" size={24} color="#e17897" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Voltar</Text>
-      </View>
+      <BackButton />
 
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {detailedRecipe.strMealThumb && (
@@ -47,14 +43,10 @@ export default function RecipeDetails({ route, navigation }) {
         )}
 
         <View style={styles.content}>
-          <Text style={styles.category}>
-            {detailedRecipe.strCategory || 'Sem categoria'}
-          </Text>
-          <Text style={styles.title}>
-            {detailedRecipe.strMeal || 'Sem título'}
-          </Text>
+          <Text style={styles.category}>{detailedRecipe.strCategory || 'Sem categoria'}</Text>
+          <Text style={styles.title}>{detailedRecipe.strMeal || 'Sem título'}</Text>
 
-          <View style={styles.statsColumn}>
+          <View style={styles.cardInfo}>
             <View style={styles.statItem}>
               <AntDesign name="star" size={16} color="#FFD700" />
               <Text style={styles.statsText}>{rating || '--'} por avaliação</Text>
@@ -64,64 +56,63 @@ export default function RecipeDetails({ route, navigation }) {
               <Feather name="clock" size={16} color="#a3a3a3" />
               <Text style={styles.statsText}>Tempo de Preparo: 30 min (média)</Text>
             </View>
-          </View>
 
-          <View style={styles.statItem}>
-            <Feather name="users" size={16} color="#a3a3a3" />
-            <Text style={styles.statsText}>Porção: 4 pessoas</Text>
-          </View>
+            <View style={styles.statItem}>
+              <Feather name="users" size={16} color="#a3a3a3" />
+              <Text style={styles.statsText}>Porção: 4 pessoas</Text>
+            </View>
 
-          <View style={styles.statItem}>
-            <Feather name="book" size={16} color="#a3a3a3" />
-            <Text style={styles.statsText}>Dificuldade: Média</Text>
+            <View style={styles.statItem}>
+              <Feather name="book" size={16} color="#a3a3a3" />
+              <Text style={styles.statsText}>Dificuldade: Média</Text>
+            </View>
           </View>
 
           {/* Ingredientes */}
-          <View style={styles.section}>
+          <View style={styles.sectionWhite}>
             <View style={styles.sectionTitleRow}>
-              <AntDesign name="checkcircleo" size={18} color="#e17897" style={{ marginRight: 6 }} />
-              <Text style={styles.sectionTitle}>Ingredientes</Text>
+           <MaterialCommunityIcons name="clipboard-check-outline" size={20} color="#B81D4E" style={{ marginRight: 6 }} />
+              <Text style={styles.sectionTitlePink}>Ingredientes</Text>
             </View>
             {ingredients.length > 0 ? (
               ingredients.map((item, index) => (
-                <Text key={index} style={styles.item}>• {item}</Text>
+                <Text key={index} style={styles.itemPink}>• {item}</Text>
               ))
             ) : (
-              <Text style={styles.item}>Ingredientes não disponíveis.</Text>
+              <Text style={styles.itemPink}>Ingredientes não disponíveis.</Text>
             )}
           </View>
 
           {/* Modo de preparo */}
-          <View style={styles.section}>
+          <View style={styles.sectionWhite}>
             <View style={styles.sectionTitleRow}>
-              <Feather name="coffee" size={18} color="#e17897" style={{ marginRight: 6 }} />
-              <Text style={styles.sectionTitle}>Modo de Preparo</Text>
+             <MaterialCommunityIcons name="pot" size={20} color="#B81D4E" style={{ marginRight: 6 }} />
+              <Text style={styles.sectionTitlePink}>Modo de Preparo</Text>
             </View>
             {detailedRecipe.strInstructions ? (
               detailedRecipe.strInstructions
                 .split('\n')
                 .filter((p) => p.trim() !== '')
                 .map((p, index) => (
-                  <Text key={index} style={styles.item}>
-                    {p.trim()}
-                  </Text>
+                  <Text key={index} style={styles.itemPink}>{p.trim()}</Text>
                 ))
             ) : (
-              <Text style={styles.item}>Modo de preparo não disponível.</Text>
+              <Text style={styles.itemPink}>Modo de preparo não disponível.</Text>
             )}
           </View>
 
           {/* Avaliação */}
-          <View style={styles.ratingSection}>
-            <Text style={styles.sectionTitle}>⭐ Deixe sua Avaliação</Text>
-            <View style={styles.starsRow}>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <AntDesign key={i} name="star" size={24} color={i === 1 ? '#FFD700' : '#ccc'} />
-              ))}
-            </View>
-            <TouchableOpacity style={styles.submitButton}>
+          <View style={styles.ratingRow}>
+            <Text style={styles.sectionTitleLarge}>Deixe sua Avaliação</Text>
+            <TouchableOpacity style={styles.submitButtonInline}>
+              <Feather name="send" size={18} color="#fff" style={{ marginRight: 4 }} />
               <Text style={styles.submitText}>Enviar</Text>
             </TouchableOpacity>
+          </View>
+          <View style={styles.starsRow}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <AntDesign key={i} name="star" size={24} color={i === 1 ? '#FFD700' : '#ccc'} />
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -129,25 +120,10 @@ export default function RecipeDetails({ route, navigation }) {
   );
 }
 
-// Estilos continuam iguais...
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fdecef',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  headerTitle: {
-    marginLeft: 10,
-    color: '#e17897',
-    fontSize: 16,
   },
   scrollContainer: {
     paddingHorizontal: 15,
@@ -171,8 +147,11 @@ const styles = StyleSheet.create({
     color: '#e17897',
     marginVertical: 10,
   },
-  statsColumn: {
-    marginVertical: 8,
+  cardInfo: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 12,
+    marginVertical: 10,
   },
   statItem: {
     flexDirection: 'row',
@@ -181,11 +160,11 @@ const styles = StyleSheet.create({
   },
   statsText: {
     fontSize: 12,
-    color: '#a3a3a3',
+    color: '#B81D4E',
     marginLeft: 6,
   },
-  section: {
-    backgroundColor: '#fcd6e2',
+  sectionWhite: {
+    backgroundColor: '#ffffff',
     borderRadius: 15,
     padding: 12,
     marginTop: 15,
@@ -195,31 +174,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 6,
   },
-  sectionTitle: {
+  sectionTitlePink: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#e17897',
+    color: '#B81D4E',
   },
-  item: {
+  sectionTitleLarge: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#B81D4E',
+  },
+  itemPink: {
     fontSize: 14,
-    color: '#333',
+    color: '#B81D4E',
     marginBottom: 4,
   },
-  ratingSection: {
+  ratingRow: {
     marginTop: 20,
-    marginBottom: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   starsRow: {
     flexDirection: 'row',
     marginTop: 8,
   },
-  submitButton: {
-    backgroundColor: '#e17897',
-    marginTop: 10,
-    paddingVertical: 8,
+  submitButtonInline: {
+    backgroundColor: '#B81D4E',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 10,
+    flexDirection: 'row',
     alignItems: 'center',
-    width: 100,
   },
   submitText: {
     color: '#fff',
